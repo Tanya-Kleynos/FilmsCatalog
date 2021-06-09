@@ -1,0 +1,59 @@
+﻿@model FilmsCatalog.Models.Film
+@using FilmsCatalog.Services
+@inject IUserPermissionsService UserPermissions
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Удаление</h1>
+
+<h3>Вы уверены, что хотите удалить фильм "@Model.Name"?</h3>
+
+@if (Model.Catalogs != null)
+{
+    <p>Этот фильм включен в @Model.Catalogs.Count() каталогов</p>
+}
+else
+{
+    <p>Этот фильм включен в 0 каталогов</p>
+}
+<div>
+    <hr />
+    <dl class="row">
+        <div class="col-3">
+            @if (Model.PosterPath != null)
+            {
+                <img class="w-100" src="@Model.PosterPath" alt="Image" />
+            }
+            else
+            {
+                <img class="w-100" src="/posters/none.png" alt="Image" />
+            }
+        </div>
+        <div class="col-7">
+            @if (Model.Description != null)
+            {
+                <b>Описание:</b>
+                <p> @Model.Description</p>
+            }
+            @if (Model.Director != null)
+            {
+                <p><b>Режиссёр:</b> @Model.Director</p>
+            }
+            <p><b>Год:</b> @Model.Year</p>
+            <p><i>Добавлено пользователем @Model.Creator.UserName</i></p>
+        </div>
+    </dl>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        @if (UserPermissions.CanEditFilm(Model))
+        {
+            <input type="submit" value="Удалить" class="btn btn-danger" /> <text>|</text>
+        }
+        <a asp-action="Index">К списку фильмов</a> | 
+        <a asp-action="Details" asp-route-id="@Model.Id">К фильму</a>
+    </form>
+</div>

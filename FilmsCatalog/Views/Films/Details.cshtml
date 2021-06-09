@@ -1,0 +1,46 @@
+﻿@model FilmsCatalog.Models.Film
+@using FilmsCatalog.Services
+@inject IUserPermissionsService UserPermissions
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Фильм "@Model.Name"</h1>
+@if (UserPermissions.CanEditFilm(Model))
+{
+    <i><a asp-action="Edit" asp-route-id="@Model.Id">Редактировать</a></i>
+    <text> / </text>
+    <i><a asp-action="Delete" asp-route-id="@Model.Id">Удалить</a></i>
+}
+
+<div>
+    <hr />
+    <dl class="row">
+        <div class="col-3">
+            @if (Model.PosterPath != null)
+            {
+                <img class="w-100" src="@Model.PosterPath" alt="Image" />
+            }
+            else
+            {
+                <img class="w-100" src="/posters/none.png" alt="Image" />
+            }
+        </div>
+        <div class="col-7">
+            @if (Model.Description != null)
+            {
+                <b>Описание:</b>
+                <p> @Model.Description</p>
+            }
+            @if (Model.Director != null)
+            {
+                <p><b>Режиссёр:</b> @Model.Director</p>
+            }
+            <p><b>Год:</b> @Model.Year</p>
+            <p><i>Добавлено пользователем @Model.Creator.UserName</i></p>
+        </div>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">К списку фильмов</a>
+</div>

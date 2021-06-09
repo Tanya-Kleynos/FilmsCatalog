@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FilmsCatalog.Services;
 
 namespace FilmsCatalog
 {
@@ -36,6 +37,8 @@ namespace FilmsCatalog
             services.AddDatabaseDeveloperPageExceptionFilter();            
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddScoped<IUserPermissionsService, UserPermissionsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,32 @@
+﻿@model FilmsCatalog.Models.CatalogFilmCreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Добавить</h1>
+
+<h4>фильм в каталог "@ViewBag.CatalogName"</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" asp-route-catalogId="@ViewBag.CatalogId">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FilmId" class="control-label">Фильм</label> 
+                <select asp-for="FilmId" class ="form-control" asp-items="@ViewBag.FilmId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Создать" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Details" asp-controller="Catalogs" asp-route-id="@ViewBag.CatalogId">Назад</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,45 @@
+﻿@model FilmsCatalog.Models.CatalogFilm
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Удаление</h1>
+
+<h4>Вы уверены, что хотите удалить фильм "@Model.Film.Name" из каталога "@Model.Catalog.Name"?</h4>
+<div>
+    <hr />
+    <dl class="row">
+        <div class="col-3">
+            @if (Model.Film.PosterPath != null)
+            {
+                <img class="w-100" src="@Model.Film.PosterPath" alt="Image" />
+            }
+            else
+            {
+                <img class="w-100" src="/posters/none.png" alt="Image" />
+            }
+        </div>
+        <div class="col-7">
+            <b>Название:</b>
+            <p> @Model.Film.Name</p>
+            @if (Model.Film.Description != null)
+            {
+                <b>Описание:</b>
+                <p> @Model.Film.Description</p>
+            }
+            @if (Model.Film.Director != null)
+            {
+                <p><b>Режиссёр:</b> @Model.Film.Director</p>
+            }
+            <p><b>Год:</b> @Model.Film.Year</p>
+        </div>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="FilmId" />
+        <input type="hidden" asp-for="CatalogId" />
+        <input type="submit" value="Удалить" class="btn btn-danger" /> |
+        <a asp-action="Details" asp-controller="Catalogs" asp-route-id="@ViewBag.CatalogId">Назад</a>
+    </form>
+</div>

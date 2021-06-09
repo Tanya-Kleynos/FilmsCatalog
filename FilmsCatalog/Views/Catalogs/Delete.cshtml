@@ -1,0 +1,54 @@
+﻿@model FilmsCatalog.Models.Catalog
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Удалить</h1>
+
+<h4>Вы уверены, что ходите удалить каталог "@Model.Name", содержащий @Model.Films.Count() фильмов?</h4>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Название каталога
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        @if (Model.Description != null)
+        {
+            <dt class="col-sm-2">
+                Описание
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+        }
+        <dt class="col-sm-2">
+            Фильмов
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Films.Count()
+        </dd>
+        <dt class="col-sm-2">
+            Создатель
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Creator.UserName)
+        </dd>
+        <dt class="col-sm-2">
+            Дата создания
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Удалить" class="btn btn-danger" /> |
+        <a asp-action="Index">К списку каталогов</a> |
+        <a asp-action="Details" asp-route-id="@ViewBag.CatalogId">К каталогу</a>
+    </form>
+</div>

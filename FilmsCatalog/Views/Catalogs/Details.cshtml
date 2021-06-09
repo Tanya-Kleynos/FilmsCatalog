@@ -1,0 +1,85 @@
+﻿@model FilmsCatalog.Models.Catalog
+@using FilmsCatalog.Services
+@inject IUserPermissionsService UserPermissions
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>@Model.Name</h1>
+<p>@Model.Description</p>
+@if (User.Identity.IsAuthenticated)
+{
+    <p>
+        <a asp-action="Create" asp-controller="CatalogFilms" asp-route-catalogId="@Model.Id">Добавить фильм</a>
+        @if (UserPermissions.CanEditCatalog(Model))
+        {
+            <span> | </span> <a asp-action="Edit" asp-controller="Catalogs" asp-route-id="@Model.Id">Редактировать</a>
+            <span> | </span> <a asp-action="Delete" asp-controller="Catalogs" asp-route-id="@Model.Id">Удалить</a>
+        }
+    </p>
+}
+
+<div class="row">
+    <div class="pr-1 pl-2">
+        <p>Фильмов на странице: </p>
+    </div>
+    <div class="pb-2">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-dark" onclick="changeNumFilmsOnPage(5)">5</button>
+            <button type="button" class="btn btn-secondary" onclick="changeNumFilmsOnPage(10)">10</button>
+            <button type="button" class="btn btn-dark" onclick="changeNumFilmsOnPage(20)">20</button>
+            <button type="button" class="btn btn-secondary" onclick="changeNumFilmsOnPage(50)">50</button>
+            <button type="button" class="btn btn-dark" onclick="changeNumFilmsOnPage(100)">100</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="uniqueId">
+    @if (Model.Films != null)
+    {
+        @foreach (var i in Model.Films.OrderBy(x => x.Film.Name))
+        {
+            <div class="row py-2 border-top border-bottom">
+                <div class="col-2">
+                    @if (i.Film.PosterPath != null)
+                    {
+                        <img class="w-100" src="@i.Film.PosterPath" alt="Image" />
+                    }
+                    else
+                    {
+                        <img class="w-100" src="/posters/none.png" alt="Image" />
+                    }
+                </div>
+                <div class="col-8">
+                    <h4><a asp-controller="Films" asp-action="Details" asp-route-id="@i.Film.Id">@i.Film.Name</a></h4>
+                    @i.Film.Director
+                    @if (i.Film.Director != null)
+                    {
+                        <span>, </span>
+                    }
+                    @i.Film.Year
+
+                    @if (i.Film.Description != null && i.Film.Description.Length > 325)
+                    {
+                        <p>@i.Film.Description.Substring(0, 325)...  <a asp-controller="Films" asp-action="Details" asp-route-id="@i.Film.Id"><i>Далее</i></a></p>
+                    }
+                    else
+                    {
+                        <p>@i.Film.Description</p>
+                    }
+                </div>
+                <div class="col-2">
+                    <a asp-action="Delete" asp-controller="CatalogFilms" asp-route-catalogId="@Model.Id" asp-route-filmId="@i.Film.Id">
+                        <i data-toggle="tooltip" data-title="Удалить" class="fas fa-trash-alt fa-lg text-danger hand_cursor"></i>
+                    </a>
+                </div>
+            </div>
+        }
+    }
+</div>
+<div>
+    <a asp-action="Index">Назад</a>
+</div>
+

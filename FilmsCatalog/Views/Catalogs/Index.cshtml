@@ -1,0 +1,44 @@
+﻿@model IEnumerable<FilmsCatalog.Models.Catalog>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Каталоги</h1>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p><a asp-action="Create">Добавить каталог</a></p>
+}
+
+<div class="panel panel-default">
+    <table class="table table-striped">
+        <tbody>
+            @foreach (var item in Model.OrderByDescending(x => x.Date))
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id" style="font-size: 1.3em">@item.Name</a><br />
+                        @item.Description
+                    </td>
+                    @if (item.Films.Count() > 0)
+                     {
+                        <td style="width: 150px">
+                            @item.Films.Count() фильмов
+                        </td>
+                     }
+                     else
+                     {
+                        <td style="width: 150px">
+                            0 фильмов
+                        </td>   
+                     }
+                    <td style="width: 220px">
+                        @item.Creator.UserName<br />
+                        @item.Date
+                    </td>
+                </tr>                
+            }
+        </tbody>
+    </table>
+</div>

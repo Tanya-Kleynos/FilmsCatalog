@@ -1,0 +1,76 @@
+﻿@using FilmsCatalog.Services
+@model IEnumerable<FilmsCatalog.Models.Film>
+@inject IUserPermissionsService UserPermissions
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Все фильмы</h1>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <p><a asp-action="Create">Добавить фильм</a></p>
+}
+
+<div class="row">
+    <div class="pr-1 pl-2">
+        <p>Фильмов на странице: </p>
+    </div>
+    <div class="pb-2">
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-dark" onclick="changeNumFilmsOnPage(5)">5</button>
+            <button type="button" class="btn btn-secondary" onclick="changeNumFilmsOnPage(10)">10</button>
+            <button type="button" class="btn btn-dark" onclick="changeNumFilmsOnPage(20)">20</button>
+            <button type="button" class="btn btn-secondary" onclick="changeNumFilmsOnPage(50)">50</button>
+            <button type="button" class="btn btn-dark" onclick="changeNumFilmsOnPage(100)">100</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="uniqueId">
+    @foreach (var item in Model)
+    {
+        <div class="row py-2 border-top border-bottom">
+            <div class="col-2">
+                @if (item.PosterPath != null)
+                {
+                    <img class="w-100" src="@item.PosterPath" alt="Image" />
+                }
+                else
+                {
+                    <img class="w-100" src="/posters/none.png" alt="Image" />
+                }
+            </div>
+            <div class="col-8">
+                <h4><a asp-action="Details" asp-route-id="@item.Id">@item.Name</a></h4>
+                @item.Director
+                @if (@item.Director != null)
+                {
+                    <span>, </span>
+                }
+                @item.Year
+
+                @if (@item.Description != null && @item.Description.Length > 325)
+                {
+                    <p>@item.Description.Substring(0, 325)...  <a asp-action="Details" asp-route-id="@item.Id"><i>Далее</i></a></p>
+                }
+                else
+                {
+                    <p>@item.Description</p>
+                }
+            </div>
+            <div class="col-2 align-middle">
+                @if (UserPermissions.CanEditFilm(item))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id">
+                        <i data-toggle="tooltip" data-title="Редактировать" class="fas fa-pencil-alt fa-lg text-muted hand_cursor"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">
+                        <i data-toggle="tooltip" data-title="Удалить" class="fas fa-trash-alt fa-lg text-danger hand_cursor"></i>
+                    </a>
+                }
+            </div>
+        </div>
+    }
+</div>
