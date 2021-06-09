@@ -71,9 +71,12 @@
                     }
                 </div>
                 <div class="col-2">
-                    <a asp-action="Delete" asp-controller="CatalogFilms" asp-route-catalogId="@Model.Id" asp-route-filmId="@i.Film.Id">
-                        <i data-toggle="tooltip" data-title="Удалить" class="fas fa-trash-alt fa-lg text-danger hand_cursor"></i>
-                    </a>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a asp-action="Delete" asp-controller="CatalogFilms" asp-route-catalogId="@Model.Id" asp-route-filmId="@i.Film.Id">
+                            <i data-toggle="tooltip" data-title="Удалить" class="fas fa-trash-alt fa-lg text-danger hand_cursor"></i>
+                        </a>
+                    }
                 </div>
             </div>
         }
